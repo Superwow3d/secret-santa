@@ -4,6 +4,7 @@ namespace test;
 
 use App\Participant\Participant;
 use App\SecretSanta\DuplicateParticipantException;
+use App\SecretSanta\InsufficientNumberOfParticipants;
 use App\SecretSanta\SecretSanta;
 use PHPUnit\Framework\TestCase;
 
@@ -46,7 +47,7 @@ class SecretSantaTest extends TestCase
             ->addParticipant(new Participant($name = 'user7', $email = 'mail7@bk.ru'));
 
         $listOfMail = $santa->getShuffledList();
-        $this->assertEquals(7, $this->count($listOfMail));
+        $this->assertEquals(7, count($listOfMail));
         $this->assertTrue($listOfMail['mail1@bk.ru'] != 'user1' &&
             $listOfMail['mail2@bk.ru'] != 'user2' &&
             $listOfMail['mail3@bk.ru'] != 'user3' &&
@@ -55,5 +56,13 @@ class SecretSantaTest extends TestCase
             $listOfMail['mail6@bk.ru'] != 'user6' &&
             $listOfMail['mail7@bk.ru'] != 'user7'
         );
+    }
+
+    public function testInsufficientNumberOfParticipants()
+    {
+        $santa = (new SecretSanta())
+            ->addParticipant(new Participant($name = 'Amir', $email = 'some@bk.ru'));
+        $this->expectException(InsufficientNumberOfParticipants::class);
+        $santa->getShuffledList();
     }
 }

@@ -7,6 +7,13 @@ class Participant
     private $name;
     private $email;
 
+    /**
+     * Participant constructor.
+     * @param string $name
+     * @param string $email
+     * @throws EmptyNameException
+     * @throws IncorrectMailException
+     */
     public function __construct(string $name, string $email)
     {
         if ($name === '') {
